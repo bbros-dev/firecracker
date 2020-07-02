@@ -1042,9 +1042,13 @@ warn_kvm_rw () {
         say_warn "WARNING:"
         say_warn "User $(whoami) does not have permission to access /dev/kvm."
         say_warn "You will not be able to run Firecracker."
-        say_warn "To run Firecracker discontinue. Then enable KVM access:"
-        say_warn "  sudo setfacl -m u:$(whoami):rw /dev/kvm"
+        say_warn "To run Firecracker:"
+        say_warn "Yes: This script will run:"
+        say_warn "        sudo setfacl --modify user:$(whoami):rw /dev/kvm"
+        say_warn "No: Discontinue. Ask your administrator to enable KVM access:"
+        say_warn "        sudo setfacl --modify user:$(whoami):rw /dev/kvm"
         get_user_confirmation || die "Aborted."
+        run_as_root setfacl --modify user:$(whoami):rw /dev/kvm
     fi
 }
 
